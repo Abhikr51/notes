@@ -1,0 +1,544 @@
+--------------------------A1 --------------------------
+{
+  #Question -1
+  getInputs <- function(n){
+    n <- 10
+    i <- 1
+    inputs <- c()
+    while(i <= n){
+      num <- as.integer(readline(prompt = paste("Enter a number ",as.character(i),": ")))
+      append(inputs,num) -> inputs
+      
+      i <- i+1
+      
+    }
+    return(inputs)
+  }
+  
+  isEven <- function(x){
+    if((x %% 2) == 0){
+      return(T)
+    }
+    return(F)
+  }
+  
+  gameInputs <- getInputs(3) 
+  gameResults <- list()
+  for (gi in gameInputs){
+  
+    tempR <- c()
+    result <- gi
+    while(T){
+      if(result == 1){
+        print("Game finished")
+        break
+      }
+      #Case Study
+      if(isEven(result)){
+        #even case
+        result / 2 -> result
+      }else{
+        #odd case
+        (result*3) + 1 -> result 
+      }
+      print(result)
+      append(tempR,result) -> tempR
+    }
+      gameResults[[length(gameResults)+1]] = tempR
+    
+  }
+  
+  View(gameResults)
+  
+  plot(gameResults[[1]],type = "o",xlab = "num of results", ylab = "values")
+  for(r in gameResults){
+    lines(r, type = "o",col = "red")
+  }
+  
+}#end Q1
+
+--------------------A2----------------------
+{#Q2
+  
+  # Derived Functions
+  elementWiseMatMul <- function(m1,m2,order){
+    data <- c()
+    i<- 1
+    while(i<= order){
+      j <- 1
+      while(j <= order ){
+        res <- m1[i,j] * m2[i,j]
+        append(data,res) -> data
+        j<- j+1
+      }
+      i <- i+1
+    }
+    matrix(data,nrow = order,ncol = order,byrow = T) -> multiplyData
+    return(multiplyData)
+  }
+  multiplyMatrix <- function(m1,m2,order){
+    data <- c()
+    i<- 1
+    while(i<= order){
+      j <- 1
+      while(j <= order ){
+        k <- 1
+        
+        temp <- 0;
+        
+        while(k <= order) {
+          temp <- temp +  m1[i,k] * (m2[k,j]);
+          k <- k+1
+        }
+        append(data,temp) -> data
+        j<- j+1
+      }
+      i <- i+1
+    }
+    matrix(data,nrow = order,ncol = order,byrow = T) -> multiplyData
+    return(multiplyData)
+  }
+    
+  
+  # Program CODE
+  
+  inputData <- c()
+  i <- 1
+  n <- 4
+  while(i<= n){
+    j <- 1
+    while(j <= n ){
+      num <- as.integer(readline(prompt = paste("Enter value for [",i,",",j,"] :")))
+      append(inputData,num)-> inputData
+      j<- j+1
+    }
+    i <- i+1
+  }
+  matrix(inputData,nrow = n,ncol = n,byrow = T) -> myMatrix1
+  matrix(inputData,nrow = n,ncol = n,byrow = T) -> myMatrix2
+  elmMul <- elementWiseMatMul(myMatrix1,myMatrix2,n)
+  matrixMul <- multiplyMatrix(myMatrix1,myMatrix2,n)
+  plot(c(matrixMul),type = "o",xlab = "Values", ylab = "Range",col='blue')
+  lines(c(elmMul), type = "o",col = "red")
+  
+  
+}#end Q2
+
+------------------------A3--------------------------
+{
+  #We use array data structure to store two NxN matrices . 
+  addMatrix <- function(m1,m2,order){
+    data <- c()
+    i<- 1
+    while(i<= order){
+      j <- 1
+      while(j <= order ){
+        res <- m1[i,j] + m2[i,j]
+        append(data,res) -> data
+        j<- j+1
+      }
+      i <- i+1
+    }
+    matrix(data,nrow = order,ncol = order,byrow = T) -> addData
+    return(addData)
+  }
+  getMatrixInput <- function(n){
+    data <- c()
+    i <- 1
+    while(i<= n){
+      j <- 1
+      while(j <= n ){
+        num <- as.integer(readline(prompt = paste("Enter value for [",i,",",j,"] :")))
+        append(data,num)-> data
+        j<- j+1
+      }
+      i <- i+1
+    }
+    return(data)
+  }
+  n <- 3
+  print("Enter Data for matrix 1 ")
+  mat1Data <- getMatrixInput(n)
+  print("Enter Data for matrix 2 ")
+  mat2Data <- getMatrixInput(n)
+  print(mat1Data)
+  print(mat2Data)
+  matArray <- array(c(mat1Data,mat2Data),dim = c(n,n,2))
+  
+  addedMatrix <- addMatrix(matArray[,,1],matArray[,,2],n)
+  View(addedMatrix)
+  invMat1 <- solve(matArray[,,1])
+  View(invMat1)
+  invMat2 <- solve(matArray[,,2])
+  View(invMat2)
+  
+}
+--------------------A4-------------------------
+{
+  calMean <- function(colvec){
+    sum <- 0
+    for(i in colvec){
+      sum <- sum + i
+    }
+    mean <- sum/(length(colvec))
+    return(mean)
+  }
+  
+  calMedian <- function(colvec){
+    
+    sort(colvec) -> colvec
+    if(length(colvec)%% 2 == 0){
+      mid <- length(colvec) %/% 2
+      return(colvec[mid])
+    }else{
+      mid <- (length(colvec) + 1) %/% 2
+      return((colvec[mid] + colvec[mid+1])/2)
+    }
+  }
+  calMode <- function(x) {
+    u <- unique(x)
+    tab <- tabulate(match(x, u))
+    u[tab == max(tab)]
+  }
+  
+  print(calMean(cars$speed))
+  print(calMedian(cars$speed))
+  print(calMode(cars$speed))
+  
+}
+-----------------------------A5------------------------------------
+{
+  
+  findMin <- function(x){
+    m <- x[1]
+    for(i in x){
+      if(m > i){
+        m <- i
+      }
+    }
+    return(m)
+  }
+  findMax <- function(x){
+    m <- x[1]
+    for(i in x){
+      if(m < i){
+        m <- i
+      }
+    }
+    return(m)
+  }
+  findMean <- function(x){
+    sum <- 0;
+    for(i in x){
+      sum <- sum+i
+    }
+    
+    return(sum/length(x))
+  }
+  findQuartile <- function(x){
+    res <- c()
+    sort(x) -> x
+    N <- length(x)
+    if(length(x)%% 2 == 0){
+      res[1] <- x[(N+1)/4] 
+      res[2] <- x[(N+1)/2] 
+      res[3] <- x[3*(N+1)/4] 
+    }else{
+      res[1] <- x[N%/%4] 
+      res[2] <- x[((N+1)%/%2 + N%/%2 )/ 2] 
+      res[3] <- x[3*N/4] 
+    }
+    return(res)
+  }
+  calMedian <- function(colvec){
+    
+    sort(colvec) -> colvec
+    if(length(colvec)%% 2 == 0){
+      mid <- length(colvec) %/% 2
+    }else{
+      mid <- (length(colvec) + 1) %/% 2
+    }
+    return(colvec[mid])
+  }
+  
+  findSummary <- function(xSet){
+    
+    for (i in colnames(xSet)) {
+      cat('\n---------------------')
+      cat('\n',i)
+      cat('\n---------------------')
+      cat('\n Min ',findMin(xSet[,i]))
+      cat('\n 1stQuartile',findQuartile(xSet[,i])[1])
+      cat('\n Mean ',findMean(xSet[,i]))
+      cat('\n Median',findQuartile(xSet[,i])[2])
+      cat('\n 1stQuartile',findQuartile(xSet[,i])[3])
+      cat('\n Max',findMax(xSet[,i]))
+      cat('\n---------------------')
+      
+    }
+  }
+  findSummary(mtcars)
+}
+
+------------------------------A6--------------------------------------
+{
+  library(ggplot2)
+  dynamicVariableCreater <- function(xSet){
+    for (i in colnames(xSet)){
+      
+      assign(i, xSet[,i],envir = parent.frame())
+    }
+  }
+  dynamicVariableCreater(mtcars)
+  ggplot(mtcars, aes(x=hp, y=mpg)) + geom_point()
+  ggplot(mtcars, aes(x=cyl, y=disp)) + geom_line()
+  ggplot(mtcars, aes(x=cyl)) + geom_histogram()
+}
+
+
+
+################PROLOG###############################
+
+% 1. Consider the family tree given in the figure 1
+
+
+male(y).
+male(a).
+male(c).
+male(f).
+male(h).
+male(i).
+
+female(z).
+female(b).
+female(d).
+female(e).
+female(g).
+female(j).
+female(k).
+
+spouse(y,z).
+spouse(a,b).
+spouse(c,d).
+spouse(e,f).
+
+husband(X) :- (spouse(X,_) ; spouse(_,X)) , male(X).
+wife(X) :- (!,husband(X)).
+
+parent(y,z,a).
+parent(y,z,c).
+parent(y,z,e).
+parent(a,b,g).
+parent(a,b,h).
+parent(e,f,j).
+parent(e,f,i).
+parent(e,f,k).
+
+father(X,Y) :- (parent(X,_,Y) ; parent(_,X,Y)) , male(X).
+mother(X,Y) :- (parent(X,_,Y) ; parent(_,X,Y)) , female(X).
+
+son(X,Y,Z) :- (parent(Y,Z,X) ; parent(Z,Y,X)),male(X).
+daughter(X,Y,Z) :- (parent(Y,Z,X) ; parent(Z,Y,X)),female(X).
+
+grandfather(X,Y) :- (father(X,Z),father(Z,Y));(father(X,Z),mother(Z,Y)).
+
+grandmother(X,Y) :- mother(X,Z),mother(Z,Y).
+
+sister(X,Y):- parent(A,B,X),parent(A,B,Y),female(X), X \= Y.
+brother(X,Y):- parent(A,B,X),parent(A,B,Y),male(X), X \= Y.
+
+aunt(X,Y) :- ((sister(X,Z),mother(Z,Y));(sister(X,Z),father(Z,Y));(wife(X,Z),uncle(Z,Y))),female(X).
+
+
+uncle(M,O) :- brother(M,N), parent(N,_,O).
+
+cousin(X,Y) :- uncle(Z,X),father(Z,Y).
+
+
+% 2. Write a PROLOG program to calculate the sum of two numbers.
+sumTwo(A,B,X):- X is A+B.
+
+% 3. Write a PROLOG program to find the maximum of two numbers.
+
+max(X,Y,X) :- X>=Y.
+max(X,Y,Y) :- X<Y.
+
+% 4. Write a PROLOG program to find the area and perimeter of a square with the side length
+% being provided by the user.
+
+areaSq(S,X):- X is S**2.
+perimeterSq(S,X):- X is 4*S.
+
+% 5. Write a PROLOG program to find the area and perimeter of a circle with the radius
+% being provided by the user.
+
+areaCircle(R,X):- X is (22/7)*R**2.
+perimeterCircle(R,X):- X is (2*(22/7)*R).
+
+% 6. Write a PROLOG program to print a Fibonacci series with stating numbers are provided
+% by user.
+
+
+fib_series(M,N,X):- M=< X,write(M),write(" "), M1 is N , N1 is M+N , fib_series(M1,N1,X).
+
+% 7. Write a PROLOG program to calculate the sum of natural numbers up to a limit (using
+% recursion).
+
+sum_num(1,1).
+sum_num(N,X) :- N > 1 , M is N - 1 , sum_num(M,Y),X is Y+N.
+
+
+% 8. Write a PROLOG program to calculate the sum of a range.
+
+sum_range(N,N,N).
+sum_range(Z,N,X) :- N > Z , M is N - 1 , sum_range(Z,M,Y),X is Y+N.
+
+% 9. Write a PROLOG program to calculate the factorial of a given number.
+
+factorial(X,N) :- X>0,Y is X-1, factorial(Y,M), N is X*M.
+factorial(0,1).
+
+
+% 10. Write a PROLOG program to find the last element of a list(list must have at least 4
+% items).
+
+lastElement([H],X) :- X is H.
+lastElement([_|T],X):- lastElement(T,Y) , X is Y.
+
+% 11. Write a PROLOG program to find the length of a list (list must have at least 4 elements).
+
+len([_|T],N) :- len(T,M), N is M+1. 
+len([],0).
+
+% 14. Write a PROLOG program to calculate the sum of numbers present in the List. ( At first
+% create a list of numbers. The length of the list must not be less than 4.)
+
+sumList([H|T],X):- sumList(T,Y) , X is H+Y.
+sumList([H],H).
+
+% 12. Write a PROLOG program to find the average of a list of numbers.
+
+averageList(T,X):- sumList(T,Y),len(T,M), X is Y/M.
+averageList([H],H).
+
+% 13. Write a PROLOG program to implement maxlist(List,Max) so that Max is the greatest
+% among all the elements present in the list (list must have at least 4 items).
+
+highest_l([H1,H2|T],X) :- max(H1,H2,H), highest_l([H|T],X).
+highest_l([H],H).
+
+% 15. Write a PROLOG program to find out the GCD and LCM of two numbers. Use these
+% predicates to find out the GCD and LCM of a list of numbers.
+
+gcd(X,X,X).
+gcd(X,Y,Z) :- X>Y, P is X-Y, gcd(P,Y,Z).
+gcd(X,Y,Z) :- X<Y, P is Y-X, gcd(X,P,Z).
+
+lcm(X,Y,Z) :- gcd(X,Y,K), L is X*Y, Z is L/K.
+
+
+
+% 16.Write a PROLOG program to insert an element at the kth position of a list.
+
+
+
+insertAt(X,[X|X1],1,X1).
+insertAt(X,[Y|X1],K,[Y|Ys]) :- K > 1, K1 is K - 1, insertAt(X,X1,K1,Ys).
+
+% 17. Write a PROLOG program to implement the following digital circuit.
+
+and(0,0,0).
+and(0,1,0).
+and(1,0,0).
+and(1,1,1).
+
+or(0,0,0).
+or(0,1,1).
+or(1,0,1).
+or(1,1,1).
+
+xor(0,0,0).
+xor(0,1,1).
+xor(1,0,1).
+xor(1,1,0).
+
+
+circuit(Cin,A,B,Sum,Cout):-
+    xor(A,B,X1),
+    and(A,B,A1),
+    xor(Cin,X1,Sum),
+    and(Cin,X1,A2),
+    or(A1,A2,Cout).
+
+
+% 19. Write a PROLOG program to concatenate two given lists.
+concat([],L,L).
+concat([H|T],L,[H|X]) :- concat(T,L,X).
+
+
+% 18. Write a PROLOG program to print the reverse of a given list.
+printRev([H|T]) :- printRev(T), concat(T,[H],_),write(H),write(" ").
+printRev([]).
+
+
+
+
+% 20. Write a PROLOG program to find the union, difference and intersection of two given
+% lists.
+is_member(X,[X|_]).
+is_member(X,[_|T]) :- is_member(X,T).
+
+union([H|X],Y,Z) :- is_member(H,Y), union(X,Y,Z).
+union([H|X],Y,[H|Z]) :- \+ is_member(H,Y), union(X,Y,Z).
+union([],Y,Y).
+
+
+intersection([H|X],Y,[H|Z]) :- is_member(H,Y),  intersection(X,Y,Z).
+intersection([H|X],Y,Z) :- \+ is_member(H,Y), intersection(X,Y,Z).
+intersection([],_,[]).
+
+difference([H|LT],L2,[H|XT]):- \+is_member(H,L2), difference(LT,L2,XT).
+difference([LH|LT],L2,X):- is_member(LH,L2), difference(LT,L2,X).
+difference([],_,[]).
+
+
+% 23. Write a PROLOG program to print the reverse of a given list.
+rev([H|T],L) :- rev(T,L1), concat(L1,[H],L).
+rev([],[]).
+
+% 21. Write a PROLOG program to check whether a given list is palindrome or not.
+
+isPalindrome(L) :- rev(L,L).
+
+% 22. Write a PROLOG program to check whether a given number is prime or not. Use this
+% predicate to print all the prime numbers upto a given number.
+
+
+hasFactor(N,L) :- N mod L =:= 0.
+hasFactor(N,L) :- L * L < N, L2 is L + 2, hasFactor(N,L2).
+
+isPrime(2).
+isPrime(3).
+isPrime(P) :- integer(P), P > 3, P mod 2 =\= 0, \+ hasFactor(P,3). 
+
+
+% 24. Write a PROLOG program to delete the kth element of a list.
+
+removeAt([_|Xs],1,Xs).
+removeAt([Y|Xs],K,[Y|Ys]) :- K > 1, K1 is K - 1, removeAt(Xs,K1,Ys).
+% 25. Write a PROLOG program to check whether a path exists between two nodes of a graph.
+% You can implement any arbitrary graph. Print the series of the nodes in the path(s) if
+% some path exists.
+
+edge(a,b).
+edge(a,c).
+edge(b,d).
+edge(c,d).
+edge(c,f).
+edge(d,e).
+edge(d,f).
+edge(f,a).
+
+findPath(X, Y, [X,Y], _) :- edge(X, Y).
+findPath(X, Y, [X|P], V) :- \+ member(X, V),edge(X, Z), findPath(Z, Y, P, [X|V]).
+
